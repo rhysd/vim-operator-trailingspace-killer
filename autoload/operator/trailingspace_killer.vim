@@ -2,7 +2,7 @@ function! operator#trailingspace_killer#do(_)
     if s:is_empty_region(getpos("'["), getpos("']"))
         return
     endif
-    '[,']substitute/\s\+$//e
+    silent '[,']substitute/\s\+$//e
     if exists('g:operator#trailingspace_killer#preserved_pos')
         call setpos('.', g:operator#trailingspace_killer#preserved_pos)
     endif
