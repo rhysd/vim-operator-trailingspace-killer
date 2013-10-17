@@ -3,7 +3,9 @@ function! operator#trailingspace_killer#do(_)
         echoerr 'empty region!'
         return
     endif
+    let search_save = @/
     silent '[,']substitute/\s\+$//e
+    let @/ = search_save
     silent! call setpos('.', g:operator#trailingspace_killer#preserved_pos)
 endfunction
 
