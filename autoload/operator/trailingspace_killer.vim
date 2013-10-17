@@ -1,11 +1,10 @@
 function! operator#trailingspace_killer#do(_)
     if s:is_empty_region(getpos("'["), getpos("']"))
+        echoerr 'empty region!'
         return
     endif
     silent '[,']substitute/\s\+$//e
-    if exists('g:operator#trailingspace_killer#preserved_pos')
-        call setpos('.', g:operator#trailingspace_killer#preserved_pos)
-    endif
+    silent! call setpos('.', g:operator#trailingspace_killer#preserved_pos)
 endfunction
 
 function! s:is_empty_region(begin, end)
