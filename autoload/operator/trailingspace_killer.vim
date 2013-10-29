@@ -11,12 +11,9 @@ function! operator#trailingspace_killer#do(_)
             return
         endif
 
-        let screen_save = line('w0')
-
         let search_save = @/
         silent '[,']substitute/\s\+$//e
         let @/ = search_save
-
     finally
         silent! call setpos('.', g:operator#trailingspace_killer#preserved_pos)
         call s:restore_screen_pos()
