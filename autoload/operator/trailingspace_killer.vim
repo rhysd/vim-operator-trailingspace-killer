@@ -1,12 +1,40 @@
+let g:operator#trailingspace_killer#filetypes_to_confirm = get(g:, 'operator#trailingspace_killer#filetypes_to_confirm', ['markdown'])
+
 function! operator#trailingspace_killer#do(_)
-    if s:is_empty_region(getpos("'["), getpos("']"))
-        echoerr 'empty region!'
-        return
+    try
+        if s:is_empty_region(getpos("'["), getpos("']"))
+            echoerr 'empty region!'
+            return
+        endif
+
+        if index(g:operator#trailingspace_killer#filetypes_to_confirm, &filetype) >= 0 && ! s:confirm()
+            return
+        endif
+
+        let screen_save = line('w0')
+
+        let search_save = @/
+        silent '[,']substitute/\s\+$//e
+        let @/ = search_save
+
+    finally
+        silent! call setpos('.', g:operator#trailingspace_killer#preserved_pos)
+        call s:restore_screen_pos()
+    endtry
+endfunction
+
+function! s:restore_screen_pos()
+    let line_diff = line('w0') - g:operator#trailingspace_killer#preserved_screen_line
+    if line_diff > 0
+        execute 'normal!' line_diff."\<C-y>"
+    elseif line_diff < 0
+        execute 'normal!' (-line_diff)."\<C-e>"
     endif
-    let search_save = @/
-    silent '[,']substitute/\s\+$//e
-    let @/ = search_save
-    silent! call setpos('.', g:operator#trailingspace_killer#preserved_pos)
+endfunction
+
+function! s:confirm()
+    let answer = input("filetype is ".&filetype.". kill trailing spaces? ")
+    return answer =~? '^y\%[es]$'
 endfunction
 
 function! s:is_empty_region(begin, end)
