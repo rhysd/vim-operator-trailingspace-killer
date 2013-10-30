@@ -3,7 +3,7 @@ let g:operator#trailingspace_killer#filetypes_to_confirm = get(g:, 'operator#tra
 function! operator#trailingspace_killer#do(_)
     try
         if s:is_empty_region(getpos("'["), getpos("']"))
-            echoerr 'empty region!'
+            call s:echo_error('Empty region: '.string([getpos("'["), getpos("']")]))
             return
         endif
 
@@ -18,6 +18,12 @@ function! operator#trailingspace_killer#do(_)
         silent! call setpos('.', g:operator#trailingspace_killer#preserved_pos)
         call s:restore_screen_pos()
     endtry
+endfunction
+
+function! s:echo_error(msg)
+    echohl ErrorMsg
+    execute 'echomsg' a:msg
+    echohl None
 endfunction
 
 function! s:restore_screen_pos()
