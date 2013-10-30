@@ -23,9 +23,9 @@ endfunction
 function! s:restore_screen_pos()
     let line_diff = line('w0') - g:operator#trailingspace_killer#preserved_screen_line
     if line_diff > 0
-        execute 'normal!' line_diff."\<C-y>"
+        execute 'silent normal!' line_diff."\<C-y>"
     elseif line_diff < 0
-        execute 'normal!' (-line_diff)."\<C-e>"
+        execute 'silent normal!' (-line_diff)."\<C-e>"
     endif
 endfunction
 
