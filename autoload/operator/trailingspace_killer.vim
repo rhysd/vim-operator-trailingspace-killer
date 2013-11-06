@@ -22,7 +22,7 @@ endfunction
 
 function! s:echo_error(msg)
     echohl ErrorMsg
-    execute 'echomsg' a:msg
+    execute 'echomsg' string(a:msg)
     echohl None
 endfunction
 
